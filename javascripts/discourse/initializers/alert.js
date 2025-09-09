@@ -5,9 +5,9 @@ import { reportTagsClick } from "../lib/tags.js";
 import { reportTopicClick, reportTopicLeave } from "../lib/topic.js";
 
 function isCookieAgreed() {
-  const regexp = /\bagreed-cookiepolicy=([^;])+/;
+  const regexp = /\b_cookies_accepted=([^;]+)/;
   const res = document.cookie.match(regexp)?.[1];
-  return res === "1";
+  return res === "all" || res === "performance";
 }
 
 export default {
@@ -23,7 +23,7 @@ export default {
             disableOA();
             return;
           }
-          fetch("https://dsapi.test.osinfra.cn/query/track/openeuler", {
+          fetch("/api-dsapi/query/track/openeuler", {
             body: JSON.stringify(data),
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -163,17 +163,14 @@ export default {
       }
 
       let enterTime = Date.now();
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
           enterTime = Date.now();
         } else {
-          oaReport(
-            'leaveForum',
-            {
-              time: Date.now() - enterTime,
-              $url: location.href
-            }
-          );
+          oaReport("leaveForum", {
+            time: Date.now() - enterTime,
+            $url: location.href,
+          });
         }
       });
 

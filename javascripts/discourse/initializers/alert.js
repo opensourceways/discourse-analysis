@@ -17,13 +17,13 @@ export default {
       "https://unpkg.com/@opensig/open-analytics@0.0.9/dist/open-analytics.mjs"
     ).then(({ OpenAnalytics, getClientInfo, OpenEventKeys }) => {
       const oa = new OpenAnalytics({
-        appKey: "openEuler",
+        appKey: "openUBMC",
         request: (data) => {
           if (!isCookieAgreed()) {
             disableOA();
             return;
           }
-          fetch("/api-dsapi/query/track/openeuler", {
+          fetch("/api-dsapi/query/track/openubmc", {
             body: JSON.stringify(data),
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -47,9 +47,9 @@ export default {
       const disableOA = () => {
         oa.enableReporting(false);
         [
-          "oa-openEuler-client",
-          "oa-openEuler-events",
-          "oa-openEuler-session",
+          "oa-openUBMC-client",
+          "oa-openUBMC-events",
+          "oa-openUBMC-session",
         ].forEach((key) => {
           localStorage.removeItem(key);
         });
